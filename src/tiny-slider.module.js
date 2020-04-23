@@ -1104,15 +1104,13 @@ export var tns = function (options) {
 
       if (options.controlsContainer) {
         setAttrs(controlsContainer, {
-          'aria-label': 'Carousel Navigation',
-          'tabindex': '0'
+          'aria-label': 'Carousel Navigation'
         });
       }
 
       if (options.controlsContainer || (options.prevButton && options.nextButton)) {
         setAttrs([prevButton, nextButton], {
           'aria-controls': slideId,
-          'tabindex': '-1',
         });
       }
 
