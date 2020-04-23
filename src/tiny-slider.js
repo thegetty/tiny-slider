@@ -876,7 +876,11 @@ export var tns = function (options) {
     if (horizontal && !isServer) {
 
       if (PERCENTAGELAYOUT || autoWidth) {
-        addCSSRule(sheet, '#' + slideId + ' > .tns-item', 'font-size:' + win.getComputedStyle(slideItems[0]).fontSize + ';', getCssRulesLength(sheet));
+        let fontSize = win.getComputedStyle(slideItems[0]).fontSize;
+        if (fontSize == undefined || fontSize == '') {
+          fontSize = 0;
+        }
+        addCSSRule(sheet, '#' + slideId + ' > .tns-item', 'font-size:' + fontSize + ';', getCssRulesLength(sheet));
         addCSSRule(sheet, '#' + slideId, 'font-size:0;', getCssRulesLength(sheet));
       } else if (carousel) {
         forEach(slideItems, function (slide, i) {
