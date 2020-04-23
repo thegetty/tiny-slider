@@ -1119,6 +1119,14 @@ export var tns = function (options) {
       if (options.controlsContainer || (options.prevButton && options.nextButton)) {
         setAttrs(prevButton, { 'data-controls': 'prev' });
         setAttrs(nextButton, { 'data-controls': 'next' });
+
+        if (!hasAttr(prevButton, 'aria-label')) {
+          setAttrs(prevButton, { 'aria-label': 'Previous Slide' });
+        }
+
+        if (!hasAttr(nextButton, 'aria-label')) {
+          setAttrs(nextButton, { 'aria-label': 'Next Slide' });
+        }
       }
 
       prevIsButton = isButton(prevButton);
