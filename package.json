@@ -1,6 +1,6 @@
 {
   "name": "@thegetty/tiny-slider",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "description": "Vanilla javascript slider for all purposes, inspired by Owl Carousel.",
   "main": "dist/tiny-slider.js",
   "types": "src/tiny-slider.d.ts",
@@ -44,9 +44,14 @@
   },
   "browserify": {
     "transform": [
-      ["babelify", {
-        "presets": ["@babel/preset-env"]
-      }]
+      [
+        "babelify",
+        {
+          "presets": [
+            "@babel/preset-env"
+          ]
+        }
+      ]
     ]
   }
 }

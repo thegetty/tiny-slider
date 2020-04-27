@@ -876,7 +876,11 @@ export var tns = function (options) {
     if (horizontal && !isServer) {
 
       if (PERCENTAGELAYOUT || autoWidth) {
-        addCSSRule(sheet, '#' + slideId + ' > .tns-item', 'font-size:' + win.getComputedStyle(slideItems[0]).fontSize + ';', getCssRulesLength(sheet));
+        let fontSize = win.getComputedStyle(slideItems[0]).fontSize;
+        if (fontSize == undefined || fontSize == '') {
+          fontSize = 0;
+        }
+        addCSSRule(sheet, '#' + slideId + ' > .tns-item', 'font-size:' + fontSize + ';', getCssRulesLength(sheet));
         addCSSRule(sheet, '#' + slideId, 'font-size:0;', getCssRulesLength(sheet));
       } else if (carousel) {
         forEach(slideItems, function (slide, i) {
@@ -1092,7 +1096,7 @@ export var tns = function (options) {
     // == controlsInit ==
     if (hasControls) {
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls" aria-label="Carousel Navigation"><button type="button" data-controls="prev" aria-controls="' + slideId + '">' + controlsText[0] + '</button><button type="button" data-controls="next" aria-controls="' + slideId + '">' + controlsText[1] + '</button></div>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<nav class="tns-controls" aria-label="Carousel"><button type="button" data-controls="prev" aria-controls="' + slideId + '" aria-label="Previous Slide">' + controlsText[0] + '</button><button type="button" data-controls="next" aria-controls="' + slideId + '" aria-label="Next Slide">' + controlsText[1] + '</button></nav>');
 
         controlsContainer = outerWrapper.querySelector('.tns-controls');
       }
@@ -1117,6 +1121,14 @@ export var tns = function (options) {
       if (options.controlsContainer || (options.prevButton && options.nextButton)) {
         setAttrs(prevButton, { 'data-controls': 'prev' });
         setAttrs(nextButton, { 'data-controls': 'next' });
+
+        if (!hasAttr(prevButton, 'aria-label')) {
+          setAttrs(prevButton, { 'aria-label': 'Previous Slide' });
+        }
+
+        if (!hasAttr(nextButton, 'aria-label')) {
+          setAttrs(nextButton, { 'aria-label': 'Next Slide' });
+        }
       }
 
       prevIsButton = isButton(prevButton);
@@ -2023,11 +2035,17 @@ export var tns = function (options) {
     return el.getAttribute('aria-disabled') === 'true';
   }
 
+  function isControlDisabled(el) {
+    return el.disabled || isAriaDisabled(el);
+  }
+
   function disEnableElement(isButton, el, val) {
-    if (isButton) {
-      el.disabled = val;
-    } else {
+    if( val === true ){
       el.setAttribute('aria-disabled', val.toString());
+      el.setAttribute('tabindex', '-1');
+    }else{
+      el.removeAttribute('aria-disabled');
+      el.removeAttribute('tabindex');
     }
   }
 
@@ -2035,8 +2053,8 @@ export var tns = function (options) {
   function updateControlsStatus() {
     if (!controls || rewind || loop) { return; }
 
-    var prevDisabled = (prevIsButton) ? prevButton.disabled : isAriaDisabled(prevButton),
-      nextDisabled = (nextIsButton) ? nextButton.disabled : isAriaDisabled(nextButton),
+    var prevDisabled = isControlDisabled(prevButton),
+      nextDisabled = isControlDisabled(nextButton),
       disablePrev = (index <= indexMin) ? true : false,
       disableNext = (!rewind && index >= indexMax) ? true : false;
 
