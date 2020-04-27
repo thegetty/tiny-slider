@@ -509,7 +509,7 @@ export var tns = function (options) {
     // fixedWidth or autoWidth while viewportMax is not available
     if (autoWidth || (fixedWidth && !viewportMax)) {
       return slideCount - 1;
-      // most cases 
+      // most cases
     } else {
       var str = fixedWidth ? 'fixedWidth' : 'items',
         arr = [];
@@ -2029,11 +2029,17 @@ export var tns = function (options) {
     return el.getAttribute('aria-disabled') === 'true';
   }
 
+  function isControlDisabled(el) {
+    return el.disabled || isAriaDisabled(el);
+  }
+
   function disEnableElement(isButton, el, val) {
-    if (isButton) {
-      el.disabled = val;
-    } else {
+    if( val === true ){
       el.setAttribute('aria-disabled', val.toString());
+      el.setAttribute('tabindex', '-1');
+    }else{
+      el.removeAttribute('aria-disabled');
+      el.removeAttribute('tabindex');
     }
   }
 
@@ -2041,8 +2047,8 @@ export var tns = function (options) {
   function updateControlsStatus() {
     if (!controls || rewind || loop) { return; }
 
-    var prevDisabled = (prevIsButton) ? prevButton.disabled : isAriaDisabled(prevButton),
-      nextDisabled = (nextIsButton) ? nextButton.disabled : isAriaDisabled(nextButton),
+    var prevDisabled = isControlDisabled(prevButton),
+      nextDisabled = isControlDisabled(nextButton),
       disablePrev = (index <= indexMin) ? true : false,
       disableNext = (!rewind && index >= indexMax) ? true : false;
 
