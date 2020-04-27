@@ -876,7 +876,11 @@ export var tns = function (options) {
     if (horizontal && !isServer) {
 
       if (PERCENTAGELAYOUT || autoWidth) {
-        addCSSRule(sheet, '#' + slideId + ' > .tns-item', 'font-size:' + win.getComputedStyle(slideItems[0]).fontSize + ';', getCssRulesLength(sheet));
+        let fontSize = win.getComputedStyle(slideItems[0]).fontSize;
+        if (fontSize == undefined || fontSize == '') {
+          fontSize = 0;
+        }
+        addCSSRule(sheet, '#' + slideId + ' > .tns-item', 'font-size:' + fontSize + ';', getCssRulesLength(sheet));
         addCSSRule(sheet, '#' + slideId, 'font-size:0;', getCssRulesLength(sheet));
       } else if (carousel) {
         forEach(slideItems, function (slide, i) {
@@ -1092,7 +1096,7 @@ export var tns = function (options) {
     // == controlsInit ==
     if (hasControls) {
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<nav class="tns-controls" aria-label="Carousel" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="' + slideId + '">' + controlsText[0] + '</button><button type="button" data-controls="next" tabindex="-1" aria-controls="' + slideId + '">' + controlsText[1] + '</button></nav>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<nav class="tns-controls" aria-label="Carousel" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="' + slideId + '" aria-label="Previous Slide">' + controlsText[0] + '</button><button type="button" data-controls="next" tabindex="-1" aria-controls="' + slideId + '" aria-label="Next Slide">' + controlsText[1] + '</button></nav>');
 
         controlsContainer = outerWrapper.querySelector('.tns-controls');
       }
@@ -1119,6 +1123,14 @@ export var tns = function (options) {
       if (options.controlsContainer || (options.prevButton && options.nextButton)) {
         setAttrs(prevButton, { 'data-controls': 'prev' });
         setAttrs(nextButton, { 'data-controls': 'next' });
+
+        if (!hasAttr(prevButton, 'aria-label')) {
+          setAttrs(prevButton, { 'aria-label': 'Previous Slide' });
+        }
+
+        if (!hasAttr(nextButton, 'aria-label')) {
+          setAttrs(nextButton, { 'aria-label': 'Next Slide' });
+        }
       }
 
       prevIsButton = isButton(prevButton);
