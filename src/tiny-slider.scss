@@ -13,6 +13,12 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    transition: visibility 1s 0s linear;
+
+    &:not(.tns-slide-active) {
+      visibility: hidden;
+      transition-delay: 1s;
+    }
   }
 }
 
