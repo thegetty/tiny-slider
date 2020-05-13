@@ -1011,8 +1011,10 @@ export var tns = function (options) {
     // == slides ==
     updateSlideStatus();
 
+    var slideText = slideCount === 1 ? 'slide' : 'slides';
+
     // == live region ==
-    outerWrapper.insertAdjacentHTML('afterbegin', '<div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">' + getLiveRegionStr() + '</span>  of ' + slideCount + '</div>');
+    outerWrapper.insertAdjacentHTML('afterbegin', '<h3 class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">'+ slideText +' <span class="current">' + getLiveRegionStr() + '</span>  of ' + slideCount + '</h3>');
     liveregionCurrent = outerWrapper.querySelector('.tns-liveregion .current');
 
     // == autoplayInit ==
