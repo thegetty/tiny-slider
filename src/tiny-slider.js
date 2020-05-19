@@ -509,7 +509,7 @@ export var tns = function (options) {
     // fixedWidth or autoWidth while viewportMax is not available
     if (autoWidth || (fixedWidth && !viewportMax)) {
       return slideCount - 1;
-      // most cases 
+      // most cases
     } else {
       var str = fixedWidth ? 'fixedWidth' : 'items',
         arr = [];
@@ -1011,8 +1011,10 @@ export var tns = function (options) {
     // == slides ==
     updateSlideStatus();
 
+    var slideText = slideCount === 1 ? 'slide' : 'slides';
+
     // == live region ==
-    outerWrapper.insertAdjacentHTML('afterbegin', '<div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">' + getLiveRegionStr() + '</span>  of ' + slideCount + '</div>');
+    outerWrapper.insertAdjacentHTML('afterbegin', '<h3 class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">'+ slideText +' <span class="current">' + getLiveRegionStr() + '</span>  of ' + slideCount + '</h3>');
     liveregionCurrent = outerWrapper.querySelector('.tns-liveregion .current');
 
     // == autoplayInit ==
@@ -1096,33 +1098,39 @@ export var tns = function (options) {
     // == controlsInit ==
     if (hasControls) {
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls" aria-label="Carousel Navigation" tabindex="0"><button type="button" data-controls="prev" tabindex="-1" aria-controls="' + slideId + '">' + controlsText[0] + '</button><button type="button" data-controls="next" tabindex="-1" aria-controls="' + slideId + '">' + controlsText[1] + '</button></div>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<nav class="tns-controls" aria-label="Carousel"><h3 class="tns-visually-hidden">Carousel Navigation</h3><button type="button" data-controls="prev" aria-controls="' + slideId + '" aria-label="Previous Slide">' + controlsText[0] + '</button><button type="button" data-controls="next" aria-controls="' + slideId + '" aria-label="Next Slide">' + controlsText[1] + '</button></nav>');
 
         controlsContainer = outerWrapper.querySelector('.tns-controls');
       }
 
       if (!prevButton || !nextButton) {
-        prevButton = controlsContainer.children[0];
-        nextButton = controlsContainer.children[1];
+        prevButton = controlsContainer.querySelector('[data-controls="prev"]');
+        nextButton = controlsContainer.querySelector('[data-controls="next"]');
       }
 
       if (options.controlsContainer) {
         setAttrs(controlsContainer, {
-          'aria-label': 'Carousel Navigation',
-          'tabindex': '0'
+          'aria-label': 'Carousel Navigation'
         });
       }
 
       if (options.controlsContainer || (options.prevButton && options.nextButton)) {
         setAttrs([prevButton, nextButton], {
           'aria-controls': slideId,
-          'tabindex': '-1',
         });
       }
 
       if (options.controlsContainer || (options.prevButton && options.nextButton)) {
         setAttrs(prevButton, { 'data-controls': 'prev' });
         setAttrs(nextButton, { 'data-controls': 'next' });
+
+        if (!hasAttr(prevButton, 'aria-label')) {
+          setAttrs(prevButton, { 'aria-label': 'Previous Slide' });
+        }
+
+        if (!hasAttr(nextButton, 'aria-label')) {
+          setAttrs(nextButton, { 'aria-label': 'Next Slide' });
+        }
       }
 
       prevIsButton = isButton(prevButton);
@@ -2029,11 +2037,17 @@ export var tns = function (options) {
     return el.getAttribute('aria-disabled') === 'true';
   }
 
+  function isControlDisabled(el) {
+    return el.disabled || isAriaDisabled(el);
+  }
+
   function disEnableElement(isButton, el, val) {
-    if (isButton) {
-      el.disabled = val;
-    } else {
+    if( val === true ){
       el.setAttribute('aria-disabled', val.toString());
+      el.setAttribute('tabindex', '-1');
+    }else{
+      el.removeAttribute('aria-disabled');
+      el.removeAttribute('tabindex');
     }
   }
 
@@ -2041,8 +2055,8 @@ export var tns = function (options) {
   function updateControlsStatus() {
     if (!controls || rewind || loop) { return; }
 
-    var prevDisabled = (prevIsButton) ? prevButton.disabled : isAriaDisabled(prevButton),
-      nextDisabled = (nextIsButton) ? nextButton.disabled : isAriaDisabled(nextButton),
+    var prevDisabled = isControlDisabled(prevButton),
+      nextDisabled = isControlDisabled(nextButton),
       disablePrev = (index <= indexMin) ? true : false,
       disableNext = (!rewind && index >= indexMax) ? true : false;
 
