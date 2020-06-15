@@ -1097,8 +1097,10 @@ export var tns = function (options) {
 
     // == controlsInit ==
     if (hasControls) {
+      var ariaId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<nav class="tns-controls" aria-label="Carousel"><h3 class="tns-visually-hidden">Carousel Navigation</h3><button type="button" data-controls="prev" aria-controls="' + slideId + '" aria-label="Previous Slide">' + controlsText[0] + '</button><button type="button" data-controls="next" aria-controls="' + slideId + '" aria-label="Next Slide">' + controlsText[1] + '</button></nav>');
+        outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<nav class="tns-controls" aria-label="Carousel"><h3 id="carouselNav-'+ ariaId +'" class="tns-visually-hidden">Carousel Navigation</h3><ul aria-labelledby="carouselNav-'+ ariaId +'"><li><button type="button" data-controls="prev" aria-controls="' + slideId + '" aria-label="Previous Slide">' + controlsText[0] + '</button></li><li><button type="button" data-controls="next" aria-controls="' + slideId + '" aria-label="Next Slide">' + controlsText[1] + '</button></li></ul></nav>');
 
         controlsContainer = outerWrapper.querySelector('.tns-controls');
       }

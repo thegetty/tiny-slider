@@ -148,3 +148,8 @@ $perpage: 3;
     }
   }
 }
+
+.tns-controls ul {
+  display: flex;
+  flex-flow: row nowrap;
+}
