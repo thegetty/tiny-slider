@@ -1011,7 +1011,7 @@ export var tns = function (options) {
     // == slides ==
     updateSlideStatus();
 
-    var slideText = slideCount === 1 ? 'slide' : 'slides';
+    var slideText = getPages() / slideCount === 1 ? 'slide' : 'slides';
 
     // == live region ==
     outerWrapper.insertAdjacentHTML('afterbegin', '<h3 class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">'+ slideText +' <span class="current">' + getLiveRegionStr() + '</span>  of ' + slideCount + '</h3>');
