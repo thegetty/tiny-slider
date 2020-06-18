@@ -703,6 +703,9 @@ export var tns = function (options) {
     newContainerClasses += ' tns-' + options.axis;
     container.className += newContainerClasses;
 
+    // set aria-label if not set
+    if(!container.hasAttribute('aria-label')){ container.setAttribute('aria-label', 'Slides') }
+
     // add constrain layer for carousel
     if (carousel) {
       middleWrapper = doc.createElement('div');
