@@ -253,7 +253,7 @@ export var tns = function (options) {
   }
 
   var horizontal = options.axis === 'horizontal' ? true : false,
-    outerWrapper = doc.createElement('div'),
+    outerWrapper = doc.createElement('section'),
     innerWrapper = doc.createElement('div'),
     middleWrapper,
     container = options.container,
@@ -690,6 +690,7 @@ export var tns = function (options) {
       classInner = 'tns-inner',
       hasGutter = hasOption('gutter');
 
+    outerWrapper.setAttribute('aria-label', 'Carousel')
     outerWrapper.className = classOuter;
     innerWrapper.className = classInner;
     outerWrapper.id = slideId + '-ow';
