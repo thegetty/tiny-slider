@@ -1,6 +1,6 @@
 {
   "name": "@thegetty/tiny-slider",
-  "version": "2.9.8",
+  "version": "2.9.10",
   "description": "Vanilla javascript slider for all purposes, inspired by Owl Carousel.",
   "main": "dist/tiny-slider.js",
   "types": "src/tiny-slider.d.ts",
