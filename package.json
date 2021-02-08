@@ -7,6 +7,9 @@
   "directories": {
     "test": "test"
   },
+  "publishConfig": {
+    "registry": "https://artifacts.getty.edu/repository/npm-internal"
+  },
   "scripts": {
     "compile": "npx babel test/js/tests-async.js -o test/js/tests-async-es5.js",
     "ngrok": "~/ngrok http 3000",
