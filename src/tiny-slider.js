@@ -1017,7 +1017,7 @@ export var tns = function (options) {
     updateSlideStatus();
 
     var slideText = getPages() / slideCount === 1 ? 'slide' : 'slides';
-    var slideCountHeadingTag = 'h' + options.headingLevel;
+    var slideCountHeadingTag = options.headingLevel === -1 ? 'span' : 'h' + options.headingLevel;
 
     // == live region ==
     outerWrapper.insertAdjacentHTML('afterbegin', '<'+ slideCountHeadingTag +' class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">'+ slideText +' <span class="current">' + getLiveRegionStr() + '</span>  of ' + slideCount + '</'+ slideCountHeadingTag +'>');
@@ -1106,7 +1106,7 @@ export var tns = function (options) {
       var ariaId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 
       if (!controlsContainer && (!prevButton || !nextButton)) {
-        var controlsHeadingTag = 'h' + options.headingLevel;
+        var controlsHeadingTag = options.headingLevel === -1 ? 'span' : 'h' + options.headingLevel;
 
         outerWrapper.insertAdjacentHTML(getInsertPosition(options.controlsPosition), '<div class="tns-controls"><'+ controlsHeadingTag +' id="carouselNav-'+ ariaId +'" class="tns-visually-hidden">Carousel Navigation</'+ controlsHeadingTag +'><ul aria-labelledby="carouselNav-'+ ariaId +'"><li><button type="button" data-controls="prev" aria-controls="' + slideId + '" aria-label="Previous Slide">' + controlsText[0] + '</button></li><li><button type="button" data-controls="next" aria-controls="' + slideId + '" aria-label="Next Slide">' + controlsText[1] + '</button></li></ul></div>');
 
